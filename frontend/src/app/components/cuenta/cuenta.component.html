@@ -1,0 +1,46 @@
+<div class="cabecera">
+  <h2>Cuentas</h2>
+  <button class="btn-nuevo" (click)="nuevo()">+ Nuevo</button>
+</div>
+<div *ngIf="mostrarFormulario" class="formulario">
+  <form [formGroup]="cuentaForm" (ngSubmit)="submit()">
+    <label>Número Cuenta: <input class="campo" formControlName="numeroCuenta" /></label>
+    <label>Tipo Cuenta: <input class="campo" formControlName="tipoCuenta" /></label>
+    <label>Saldo Inicial: <input class="campo" type="number" formControlName="saldoInicial" /></label>
+    <label>Estado: <input class="campo" type="checkbox" formControlName="estado" /></label>
+    <div formGroupName="cliente">
+      <label>ID Cliente: <input class="campo" formControlName="clienteId" /></label>
+    </div>
+    <button class="btn-guardar" type="submit" [disabled]="cuentaForm.invalid">Guardar</button>
+  </form>
+</div>
+<input [(ngModel)]="filtro" placeholder="Buscar por número o tipo de cuenta" class="buscador"/>
+<table class="tabla-clientes" *ngIf="cuentas.length > 0">
+  <thead>
+    <tr>
+      <th>Número</th>
+      <th>Tipo</th>
+      <th>Saldo</th>
+      <th>Estado</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let cuenta of cuentas | filtroCuenta:filtro">
+      <td>{{ cuenta.numeroCuenta }}</td>
+      <td>{{ cuenta.tipoCuenta }}</td>
+      <td>{{ cuenta.saldoInicial | currency }}</td>
+      <td>{{ cuenta.estado ? 'Activa' : 'Inactiva' }}</td>
+      <td>
+        <button class="btn-editar" (click)="editar(cuenta)">Editar</button>
+        <button class="btn-eliminar" (click)="eliminar(cuenta.numeroCuenta)">Eliminar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="mensaje" class="mensaje" [class.error]="esError">
+  {{ mensaje }}
+</div>
+
+

@@ -1,0 +1,52 @@
+<div class="cliente-header">
+  <h2>Clientes</h2>
+  <button class="btn-nuevo" (click)="nuevo()">+ Nuevo</button>
+</div>
+
+<div *ngIf="mostrarFormulario" class="formulario">
+  <form [formGroup]="clienteForm" (ngSubmit)="submit()">
+    <label>ID: <input class="campo" formControlName="clienteId" /></label>
+    <div *ngIf="clienteForm.get('clienteId')?.invalid && clienteForm.get('clienteId')?.touched">ID requerido</div>
+
+    <label>Nombre: <input class="campo" formControlName="nombre" /></label>
+    <div *ngIf="clienteForm.get('nombre')?.invalid && clienteForm.get('nombre')?.touched">Nombre requerido</div>
+
+    <label>Género: <input class="campo" formControlName="genero" /></label>
+    <label>Edad: <input class="campo" type="number" formControlName="edad" /></label>
+    <label>Identificación: <input class="campo" formControlName="identificacion" /></label>
+    <label>Dirección: <input class="campo" formControlName="direccion" /></label>
+    <label>Teléfono: <input class="campo" formControlName="telefono" /></label>
+    <label>Contraseña: <input class="campo" type="password" formControlName="contrasena" /></label>
+    <label>Estado: <input class="campo" type="checkbox" formControlName="estado" /></label>
+
+    <button class="btn-guardar" type="submit" [disabled]="clienteForm.invalid">Guardar</button>
+  </form>
+</div>
+<input [(ngModel)]="filtro" placeholder="Buscar por nombre o ID" class="buscador"/>
+<table class="tabla-clientes" *ngIf="clientes.length > 0">
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Identificación</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let cliente of clientes | filtroCliente:filtro">
+      <td>{{ cliente.nombre }}</td>
+      <td>{{ cliente.identificacion }}</td>
+      <td>
+        <button class="btn-editar" (click)="editar(cliente)">Editar</button>
+        <button class="btn-eliminar" (click)="eliminar(cliente.clienteId)">Eliminar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p *ngIf="clientes.length === 0">No hay clientes registrados.</p>
+
+<div *ngIf="mensaje" class="mensaje" [class.error]="esError">
+  {{ mensaje }}
+</div>
+
+

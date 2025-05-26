@@ -1,0 +1,34 @@
+<div class="cabecera">
+  <h2>Reportes</h2>
+</div>
+<form [formGroup]="reporteForm" class="formulario">
+  <label>ID Cliente: <input class="campo" formControlName="clienteId" /></label>
+  <label>Desde: <input class="campo" type="date" formControlName="desde" /></label>
+  <label>Hasta: <input  class="campo" type="date" formControlName="hasta" /></label>
+  <div class="botones-reporte">
+    <button type="button" class="btn-ver" (click)="obtenerJson()" [disabled]="reporteForm.invalid">Ver JSON</button>
+    <button type="button" class="btn-pdf" (click)="descargarPdf()" [disabled]="reporteForm.invalid">Descargar PDF</button>
+  </div>
+</form>
+
+<table class="tabla-clientes" *ngIf="reporte?.length > 0">
+  <thead>
+    <tr>
+      <th>Fecha</th>
+      <th>Movimiento</th>
+      <th>Cuenta</th>
+      <th>Valor</th>
+      <th>Saldo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of reporte">
+      <td>{{ item.fecha | date:'shortDate' }}</td>
+      <td>{{ item.tipo }}</td>
+      <td>{{ item.numeroCuenta }}</td>
+      <td>{{ item.movimiento | currency }}</td>
+      <td>{{ item.saldoDisponible | currency }}</td>
+    </tr>
+  </tbody>
+</table>
+<p *ngIf="reporte?.length === 0">No se encontraron resultados.</p>
